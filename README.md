@@ -5,7 +5,7 @@ This project is a frontend application designed for an AI-related service. It ai
 
 ## Technologies Used
 - **TypeScript**: For type safety and improved development experience.
-- **React**: A JavaScript library for building user interfaces.
+- **Next js**: A JavaScript library for building user interfaces.
 - **CSS**: For styling the application.
 
 ## Installation
