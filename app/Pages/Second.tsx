@@ -99,94 +99,58 @@ const Second = () => {
 
           // Handle recording stop
           recorder.onstop = () => {
-            new Blob(recordedChunksRef.current, {
+            const videoBlob = new Blob(recordedChunksRef.current, {
               type: "video/webm",
             });
+            const videoURL = URL.createObjectURL(videoBlob);
+            // You can use videoURL to play or save the video
           };
 
-          // Start recording
-          recorder.start();
           mediaRecorderRef.current = recorder;
-          setIsRecording(true);
+          recorder.start();
 
-          // Start countdown
+          // Countdown for 60 seconds
+          let remainingTime = 60;
           countdownTimer = setInterval(() => {
-            setTimeLeft((prev) => {
-              if (prev <= 1) {
-                clearInterval(countdownTimer);
-                stopRecording();
-                return 0;
-              }
-              return prev - 1;
-            });
+            if (remainingTime > 0) {
+              remainingTime -= 1;
+              setTimeLeft(remainingTime);
+            } else {
+              clearInterval(countdownTimer);
+              stopRecording();
+            }
           }, 1000);
-        } catch (err) {
-          console.error("Error starting recording:", err);
+        } catch (error) {
+          console.error("Error accessing media devices.", error);
         }
       }
     };
 
-    if (recordingStarted) {
-      startRecordingAndCountdown();
-    }
+    startRecordingAndCountdown();
 
-    // Cleanup
-    return () => {
-      if (countdownTimer) clearInterval(countdownTimer);
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stop();
-      }
-      // Ensure stream is stopped
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [recordingStarted]);
+    return () => clearInterval(countdownTimer);
+  }, [recordingStarted, isRecording, question]);
 
   return (
-    <div className="min-h-full bg-gray-900 text-white flex flex-col">
-      {!showLoader && !recordingStarted && (
-        <h1 className="text-2xl font-bold">{question}</h1>
-      )}
-
-      {showLoader && (
-        <div className="flex justify-center items-center">
-          <div className="loader"></div>
-          <p className="text-xl ml-4">Loading...</p>
-        </div>
-      )}
-
-      {recordingStarted && !showLoader && (
-        <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Answer Recording</h2>
-          <div className="bg-gray-800 p-4 rounded-md">
-            <p className="text-lg mb-4">Time Left: {timeLeft} seconds</p>
-
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              className="w-full max-w-md mx-auto mb-4 rounded-md"
-            />
-
-            {isRecording && (
-              <div className="flex justify-center space-x-4">
-                <div className="text-red-500 font-bold animate-pulse">
-                  Recording in Progress...
-                </div>
-                {timeLeft > 10 && (
-                  <button
-                    onClick={handleSubmit}
-                    className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                  >
-                    Submit Answer
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient bg-gray-800 text-white">
+      <div className="p-8">
+        <video
+          ref={videoRef}
+          className="w-full h-full border border-gray-500 rounded-md"
+          muted
+        />
+      </div>
+      <div className="p-8">
+        <h1 className="text-3xl">{question}</h1>
+        <p className="text-xl">Time Left: {timeLeft}s</p>
+        {showLoader && <div>Loading...</div>}
+        <button
+          onClick={handleSubmit}
+          className="bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Submit Answer
+        </button>
+      </div>
     </div>
   );
 };
