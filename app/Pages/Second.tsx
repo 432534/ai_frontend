@@ -39,7 +39,6 @@ const Second = () => {
 
     // Navigate and show message
     router.push("/", {
-      //@ts-expect-error: Unable to find the type error so used it
       query: {
         message: isManualSubmit
           ? "Answer submitted successfully!"
@@ -83,6 +82,7 @@ const Second = () => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
+            videoRef.current.muted = true; // Ensuring the video is muted
           }
 
           // Create MediaRecorder
