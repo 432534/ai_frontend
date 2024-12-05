@@ -112,13 +112,13 @@ const First = () => {
                 isRecording={isRecording}
               />
             ) : (
-              <CameraBox stream={permissions.camera ? null : undefined} />
+              <CameraBox />
             )}
           </div>
 
           {/* Instructions */}
           <div className="flex-grow md:w-1/2 bg-gray-800 rounded-lg p-6 flex flex-col justify-between shadow-xl shadow-white">
-            <div className=" w-full h-[10vh] flex justify-end gap-5">
+            <div className="w-full h-[10vh] flex justify-end gap-5">
               <div className="h-[5vh] w-[15vh] border-[1px] border-orange-500 mt-[-10vh] p-[4px] pl-8 rounded-lg">Zeko</div>
               <div className="h-[5vh] w-[15vh] border-[1px] border-orange-500 mt-[-10vh] p-[4px] pl-8 rounded-lg"><h1>26 min</h1></div>
             </div>
@@ -127,11 +127,11 @@ const First = () => {
               <button
                 onClick={handleStartClick}
                 disabled={startClicked && !allPermissionsGranted}
-                className={${
+                className={`${
                   startClicked && !allPermissionsGranted
                     ? "bg-gray-600 cursor-not-allowed"
                     : "bg-indigo-600 hover:bg-indigo-700 shadow-lg"
-                } text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105}
+                } text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105`}
               >
                 {buttonLabel}
               </button>
