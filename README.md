@@ -2,6 +2,8 @@
 
 ## Overview
 This project is a frontend application designed for an AI-related service. It aims to provide users with an intuitive interface to interact with AI models and features.
+![Screenshot 2024-12-05 075804](https://github.com/user-attachments/assets/0afd848b-fded-42c9-9f30-768503d12991)
+
 
 ## Technologies Used
 - **TypeScript**: For type safety and improved development experience.
