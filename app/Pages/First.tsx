@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
@@ -24,11 +22,11 @@ const First = () => {
   const [, setPermissionAttempts] = useState(0);
 
   useEffect(() => {
-    const handleResize = () => {
-      // Handling screen resize logic if necessary
-    };
-
     if (typeof window !== "undefined") {
+      const handleResize = () => {
+        // Do something with screen width if needed
+      };
+
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
@@ -50,7 +48,6 @@ const First = () => {
     setPermissionAttempts((prev) => prev + 1);
 
     try {
-      // Request camera and microphone access
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
@@ -63,11 +60,6 @@ const First = () => {
       mediaStream.getTracks().forEach((track) => track.stop());
     } catch (err) {
       console.error("Permission error:", err);
-      if (err instanceof Error && err.name === "NotReadableError") {
-        alert("Camera is already in use or not accessible. Please check your camera settings.");
-      } else {
-        alert("An error occurred while trying to access the camera. Please check your permissions.");
-      }
       resetPermissions();
     }
   };
@@ -97,13 +89,12 @@ const First = () => {
       <Head>
         <title>Trainee Interview</title>
       </Head>
-
+      
       <Navbar />
 
       <main className="p-6 flex justify-center items-center">
         <div className="container mx-auto flex flex-col md:flex-row gap-8 h-[80vh] pt-[8vh]">
           <div className="flex-grow bg-gray-800 rounded-lg shadow-lg p-6 shadow-white">
-            {/* Camera Box */}
             <div className="mt-[-10vh] text-white font-semibold text-2xl">TRAINEE INTERVIEW</div>
             {allPermissionsGranted && !isRecording ? (
               <VideoRecorder
@@ -112,16 +103,11 @@ const First = () => {
                 isRecording={isRecording}
               />
             ) : (
-              <CameraBox />
+              <CameraBox stream={permissions.camera ? null : null} />
             )}
           </div>
 
-          {/* Instructions */}
           <div className="flex-grow md:w-1/2 bg-gray-800 rounded-lg p-6 flex flex-col justify-between shadow-xl shadow-white">
-            <div className="w-full h-[10vh] flex justify-end gap-5">
-              <div className="h-[5vh] w-[15vh] border-[1px] border-orange-500 mt-[-10vh] p-[4px] pl-8 rounded-lg">Zeko</div>
-              <div className="h-[5vh] w-[15vh] border-[1px] border-orange-500 mt-[-10vh] p-[4px] pl-8 rounded-lg"><h1>26 min</h1></div>
-            </div>
             <Instructions startClicked={startClicked} permissions={permissions} />
             <div className="mt-6 flex flex-col space-y-4">
               <button
